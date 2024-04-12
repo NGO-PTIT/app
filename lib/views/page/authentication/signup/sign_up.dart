@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
 
 import '../../../../config/constants/app_colors.dart';
+import 'package:football_news_app/views/page/main_page.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({super.key});
@@ -18,6 +22,58 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
+  }
+  String url = "http://10.0.2.2:8080/api/register";
+
+  Future<void> _register() async {
+    if(_rePasswordController.text.compareTo(_passwordController.text) != 0){
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Lỗi'),
+          content: const Text('Xác nhận lại mật khẩu'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+    else{
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': _accountController.text,
+          'password': _passwordController.text,
+        }),
+      );
+      if (response.body.contains('ok')) {
+          Navigator.of(context).pop();
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Lỗi'),
+            content: const Text('Tài khoản đã tồn tại trong hệ thống'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -73,8 +129,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    FocusScope.of(context).requestFocus(_focusNode);
-                    Navigator.pop(context);
+                    _register();
+                    // FocusScope.of(context).requestFocus(_focusNode);
+                    // Navigator.pop(context);
                   },
                   child: const Text('Đăng kí'),
                 ),

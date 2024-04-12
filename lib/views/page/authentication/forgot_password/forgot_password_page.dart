@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
 import 'package:football_news_app/views/common/common_text.dart';
 
 import '../../../../config/constants/app_colors.dart';
-import 'new_password_page.dart';
+import '../login/login_page.dart';
+import 'package:http/http.dart' as http;
 
 class ForgotPasswordPage extends StatefulWidget {
   ForgotPasswordPage({super.key});
@@ -13,14 +16,67 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPasswordPage> {
-  late final TextEditingController _gmailController = TextEditingController();
-  late final TextEditingController _fillKeyController = TextEditingController();
+  late final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _rePasswordController = TextEditingController();
+  late final TextEditingController _accountController = TextEditingController();
   late final FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     super.initState();
   }
 
+  String url = "http://10.0.2.2:8080/api/update";
+
+  Future<void> _forgot_pass() async {
+    if(_rePasswordController.text.compareTo(_passwordController.text) != 0){
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Lỗi'),
+          content: const Text('Xác nhận lại mật khẩu'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+    else{
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': _accountController.text,
+          'password': _passwordController.text,
+        }),
+      );
+      if (response.body.contains('ok')) {
+        Navigator.of(context).pop();
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Lỗi'),
+            content: const Text('Tài khoản không đúng'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,31 +97,30 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
               ),
               AppConstants.kSpacingItem16,
               TextFormField(
-                controller: _gmailController,
+                controller: _accountController,
                 focusNode: _focusNode,
                 decoration: InputDecoration(
-                  labelText: 'Gmail',
+                  labelText: 'Tài khoản',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
               AppConstants.kSpacingItem16,
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    FocusScope.of(context).requestFocus(_focusNode);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Gửi mã'),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Nhập mật khẩu',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
               AppConstants.kSpacingItem16,
               TextFormField(
-                controller: _fillKeyController,
+                controller: _rePasswordController,
                 decoration: InputDecoration(
-                  labelText: 'Nhập mã',
+                  labelText: 'Nhập lại mật khẩu',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -77,11 +132,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    FocusScope.of(context).requestFocus(_focusNode);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewPasswordPage()));
+                    _forgot_pass();
                   },
                   child: const Text('Đặt lại mật khẩu'),
                 ),
