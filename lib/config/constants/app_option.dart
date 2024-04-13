@@ -6,6 +6,7 @@ import '../../models/comment_model.dart';
 import '../../models/player_model.dart';
 import '../../models/schedule_model.dart';
 import '../../models/score_model.dart';
+import '../../models/statistical_model.dart';
 import 'assets.dart';
 
 class AppOption {
@@ -677,4 +678,29 @@ class AppOption {
       avatarUrl: Assets.imgNews2,
     ),
   ];
+  static final MatchStats team1Stats = MatchStats(
+    shots: 18,
+    shotsOnTarget: 6,
+    possession: '59%',
+    passes: 567,
+    passAccuracy: '88%',
+    fouls: 14,
+    yellowCards: 2,
+    redCards: 0,
+    offsides: 4,
+    corners: 7,
+  );
+
+  static final MatchStats team2Stats = MatchStats(
+    shots: 15,
+    shotsOnTarget: 7,
+    possession: '41%',
+    passes: 395,
+    passAccuracy: '84%',
+    fouls: 8,
+    yellowCards: 4,
+    redCards: 0,
+    offsides: 3,
+    corners: 5,
+  );
 }

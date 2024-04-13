@@ -9,15 +9,24 @@ import 'package:football_news_app/views/page/statistics/widget/score_board_widge
 
 import '../../../config/constants/app_option.dart';
 import '../../../models/comment_model.dart';
+import '../../../models/schedule_model.dart';
 
 class StatisticsPage extends StatefulWidget {
-  const StatisticsPage({super.key});
+  final Schedule schedule;
+  const StatisticsPage({super.key, required this.schedule});
 
   @override
   State<StatisticsPage> createState() => _StatisticsPageState();
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
+  late final Schedule schedule;
+
+  @override
+  void initState() {
+    super.initState();
+    schedule = widget.schedule;
+  }
   bool showAllComments = false;
   TextEditingController commentController = TextEditingController();
   @override
@@ -78,18 +87,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 AppConstants.kSpacingItem8,
                 Row(
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 20,
-                      backgroundImage: AssetImage(Assets.imgNews2),
+                      backgroundImage: AssetImage(schedule.icon1),
                     ),
                     AppConstants.kSpacingItemW8,
-                    CommonText('Man United'),
+                    CommonText(schedule.team1),
                     Spacer(),
-                    CommonText('Man City'),
+                    CommonText(schedule.team2),
                     AppConstants.kSpacingItemW8,
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 20,
-                      backgroundImage: AssetImage(Assets.imgNews3),
+                      backgroundImage: AssetImage(schedule.icon1),
                     ),
                     AppConstants.kSpacingItemW8,
                   ],
@@ -118,7 +127,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               children: [
                                 AppConstants.kSpacingItemW24,
                                 const CommonText(
-                                  '1',
+                                  '80%',
                                   textColor: AppColors.white,
                                   variant: Variant.h6,
                                   fontStyle: FontStyle.bold,
@@ -157,7 +166,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             children: [
                               const Spacer(),
                               const CommonText(
-                                '4',
+                                '20%',
                                 textColor: AppColors.white,
                                 variant: Variant.h6,
                                 fontStyle: FontStyle.bold,
@@ -174,9 +183,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 10,
+                  itemCount: 1,
                   itemBuilder: (context, index) {
-                    return const ScoreBoardWidget();
+                    return ScoreBoardWidget();
                   },
                 ),
                 TextFormField(

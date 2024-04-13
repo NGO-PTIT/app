@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
 
 import '../../../../config/constants/app_colors.dart';
-import 'package:football_news_app/views/page/main_page.dart';
 import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
@@ -104,6 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               AppConstants.kSpacingItem16,
               TextFormField(
+                obscureText: true,
                 controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Mật khẩu',
@@ -114,6 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               AppConstants.kSpacingItem8,
               TextFormField(
+                obscureText: true,
                 controller: _rePasswordController,
                 decoration: InputDecoration(
                   labelText: 'Nhập lại mật khẩu',
@@ -130,8 +131,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     _register();
-                    // FocusScope.of(context).requestFocus(_focusNode);
-                    // Navigator.pop(context);
                   },
                   child: const Text('Đăng kí'),
                 ),

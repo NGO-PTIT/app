@@ -100,7 +100,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                 controller: _accountController,
                 focusNode: _focusNode,
                 decoration: InputDecoration(
-                  labelText: 'Tài khoản',
+                  labelText: 'Nhập tài khoản',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -108,9 +108,10 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
               ),
               AppConstants.kSpacingItem16,
               TextFormField(
+                obscureText: true,
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Nhập mật khẩu',
+                  labelText: 'Nhập mật khẩu mới',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -118,9 +119,10 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
               ),
               AppConstants.kSpacingItem16,
               TextFormField(
+                obscureText: true,
                 controller: _rePasswordController,
                 decoration: InputDecoration(
-                  labelText: 'Nhập lại mật khẩu',
+                  labelText: 'Nhập lại mật khẩu mới',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

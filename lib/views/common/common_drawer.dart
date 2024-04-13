@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:football_news_app/views/page/schedule/schedule_page.dart';
 
 import '../../config/constants/app_colors.dart';
+import '../page/main_page.dart';
 import '../page/manage_notification/manage_notification_page.dart';
+import '../page/news/news_page.dart';
 import 'common_text.dart';
 
 class CommonDrawer extends StatelessWidget {
@@ -42,7 +44,12 @@ class CommonDrawer extends StatelessWidget {
               variant: Variant.h6,
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainPage(),
+                ),
+              );
             },
           ),
           ListTile(

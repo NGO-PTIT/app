@@ -91,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               AppConstants.kSpacingItem16,
               TextFormField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Mật khẩu',
                   hintText: 'Nhập mật khẩu',
@@ -119,6 +120,10 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainPage()),
+                    );
                     _login();
                   },
                   child: const Text('Đăng nhập'),
