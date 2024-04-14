@@ -45,6 +45,7 @@ class _ClubPageState extends State<ClubPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[50],
       appBar: AppBar(
         iconTheme: const IconThemeData(color: AppColors.white),
         backgroundColor: AppColors.emeraldGreen,
@@ -76,7 +77,7 @@ class _ClubPageState extends State<ClubPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
-                      color: Colors.grey[200],
+                      color: Colors.white,
                     ),
                     child: TextField(
                       controller: _searchController,

@@ -29,6 +29,7 @@ class _DetailNewPageState extends State<DetailNewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[50],
       appBar: AppBar(
           iconTheme: const IconThemeData(color: AppColors.white),
           backgroundColor: AppColors.emeraldGreen,
@@ -90,13 +91,16 @@ class _DetailNewPageState extends State<DetailNewPage> {
                   AppConstants.kSpacingItem8,
                   ElevatedButton(
                     onPressed: () {
-                      AppOption.comments.add(
-                        Comment(
-                          image: Assets.imgNews,
-                          userName: 'User',
-                          text: commentController.text,
-                        ),
-                      );
+                      setState(() {
+                        AppOption.comments.add(
+                          Comment(
+                            image: Assets.imgNews,
+                            userName: 'User',
+                            text: commentController.text.trim(),
+                          ),
+                        );
+                      });
+                      commentController.clear();
                     },
                     child: const CommonText(
                       'Gửi',

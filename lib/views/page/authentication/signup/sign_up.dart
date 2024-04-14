@@ -78,6 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[50],
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(

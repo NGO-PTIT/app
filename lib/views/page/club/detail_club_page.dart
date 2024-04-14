@@ -30,8 +30,9 @@ class _DetailClubPageState extends State<DetailClubPage> {
     List<ScoreModel> currentTeamDataList = getCurrentTeamDataList(widget.club.name);
     List<Player> listPlayer = getPlayer(widget.club.name);
     return DefaultTabController(
-      length: 4, // Change length to 4 to match the number of tabs
+      length: 4,
       child: Scaffold(
+        backgroundColor: Colors.green[50],
         appBar: AppBar(
             iconTheme: const IconThemeData(color: AppColors.white),
             backgroundColor: AppColors.emeraldGreen,

@@ -70,7 +70,7 @@ class CommonDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SchedulePage(),
+                  builder: (context) => SchedulePage(),
                 ),
               );
             },

@@ -226,12 +226,12 @@ class AppOption {
         date: '18/04'
     ),
     Schedule(
-        team1: 'Fulham',
+        team1: 'PSG',
         icon1: 'assets/icons/fulham.png',
-        team2: 'Brentford',
+        team2: 'FC Barelona',
         icon2: 'assets/icons/brentford.png',
-        time: '21:00',
-        date: '18/04'
+        time: '2-3',
+        date: 'FT'
     ),
   ];
   static List<Comment> comments = [

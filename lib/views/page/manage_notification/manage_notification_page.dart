@@ -26,6 +26,7 @@ class _ManageNotificationPageState extends State<ManageNotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[50],
       appBar: AppBar(
         iconTheme: const IconThemeData(color: AppColors.white),
         backgroundColor: AppColors.emeraldGreen,

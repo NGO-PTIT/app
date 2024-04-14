@@ -1,42 +1,79 @@
 import 'package:flutter/material.dart';
+import '../../../config/constants/app_colors.dart';
+import '../../../models/schedule_model.dart';
+import '../../common/common_drawer.dart';
+import '../../common/common_text.dart';
 
-class MatchInfo extends StatelessWidget {
-  const MatchInfo({super.key});
+class MatchInfoPage extends StatefulWidget {
+  final Schedule schedule;
+
+  const MatchInfoPage({super.key, required this.schedule});
+
+  @override
+  State<MatchInfoPage> createState() => _MatchInfoState();
+}
+
+class _MatchInfoState extends State<MatchInfoPage> {
+  late final Schedule schedule;
+
+  @override
+  void initState() {
+    super.initState();
+    schedule = widget.schedule;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        margin: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Image.network('path_to_barcelona_logo'),
-              title: Text('Barcelona vs PSG'),
-              subtitle: Text('Quarter-final - Leg 2 of 2\nAggregate: 3 - 2'),
-              trailing: Image.network('path_to_psg_logo'),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  WinProbability(
-                    team: 'Barcelona',
-                    probability: 44,
-                    color: Colors.blueAccent,
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: Colors.green[50],
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: AppColors.white),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+          backgroundColor: AppColors.emeraldGreen,
+          title: const CommonText(
+            'MatchInfo',
+            fontStyle: FontStyle.bold,
+            textColor: AppColors.white,
+            variant: Variant.h6,
+          ),
+        ),
+        drawer: const CommonDrawer(),
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildTitle(),
+                      const SizedBox(height: 20),
+                      _buildTeamInfo(),
+                      const SizedBox(height: 20),
+                      _buildWinProbabilityBar(),
+                      const SizedBox(height: 20),
+                      _buildWeatherInfo(),
+                      const SizedBox(height: 20),
+                      _buildTabBar(),
+                      Expanded(
+                        child: TabBarView(
+                          children: const [
+                            Center(child: Text('Timeline Content')),
+                            Center(child: Text('Lineups Content')),
+                            Center(child: Text('Stats Content')),
+                            Center(child: Text('Trending Content')),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  WinProbability(
-                    team: 'Extra time',
-                    probability: 25,
-                    color: Colors.grey,
-                  ),
-                  WinProbability(
-                    team: 'PSG',
-                    probability: 31,
-                    color: Colors.redAccent,
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -44,32 +81,117 @@ class MatchInfo extends StatelessWidget {
       ),
     );
   }
-}
 
-class WinProbability extends StatelessWidget {
-  final String team;
-  final int probability;
-  final Color color;
+  Widget _buildTitle() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.blue, width: 3.0)),
+      ),
+      child: const Text(
+        'title',
+        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
 
-  WinProbability({super.key,
-    required this.team,
-    required this.probability,
-    required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text('$team'),
-        SizedBox(height: 4.0),
-        Text('$probability%', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(height: 4.0),
-        LinearProgressIndicator(
-          value: probability / 100,
-          valueColor: AlwaysStoppedAnimation<Color>(color),
-          backgroundColor: Colors.grey[300],
+  Widget _buildTeamInfo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Column(
+          children: [
+            Image.asset('assets/images/real_madrid.png', width: 50, height: 50),
+            const Text('Real'),
+          ],
+        ),
+        const Text(
+          '2:00 AM',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Column(
+          children: [
+            Image.asset('assets/images/barcelona.png', width: 50, height: 50),
+            const Text('Barcelona'),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildWinProbabilityBar() {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Container(
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.237,
+              child: Container(
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius:
+                      const BorderRadius.horizontal(left: Radius.circular(5)),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FractionallySizedBox(
+                widthFactor: 0.491,
+                child: Container(
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: const BorderRadius.horizontal(
+                        right: Radius.circular(5)),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text('23.7%', style: TextStyle(color: Colors.blue)),
+            Text('Win probability', style: TextStyle(color: Colors.black)),
+            Text('49.1%', style: TextStyle(color: Colors.red)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWeatherInfo() {
+    return Row(
+      children: const [
+        Text('Estadio Ramon de Carranza, Cadiz'),
+        Text('  - 21°C'),
+      ],
+    );
+  }
+
+  Widget _buildTabBar() {
+    return Material(
+      color: AppColors.emeraldGreen,
+      child: const TabBar(
+        tabs: [
+          Tab(text: 'TIMELINE'),
+          Tab(text: 'LINEUPS'),
+          Tab(text: 'STATS'),
+          Tab(text: 'TRENDING'),
+        ],
+        indicatorColor: Colors.white,
+        indicatorWeight: 3,
+      ),
     );
   }
 }

@@ -17,20 +17,29 @@ class ScoreWidget extends StatelessWidget {
     super.key,
     required this.index,
   });
-  @override
+  MaterialPageRoute<dynamic> getPageRoute(String check, List<Schedule> listSchedule, int index) {
+    if (check.compareTo('FT')==0) {
+      return MaterialPageRoute(
+        builder: (context) => StatisticsPage(
+          schedule: listSchedule[index],
+        ),
+      );
+    } else {
+      return MaterialPageRoute(
+        builder: (context) => MatchInfoPage(
+          schedule: listSchedule[index],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
-          // MaterialPageRoute(
-          //   builder: (context) => StatisticsPage(
-          //     schedule: listSchedule[index],),
-          // ),
-          MaterialPageRoute(
-            builder: (context) => MatchInfo(),
-          ),
+          getPageRoute(listSchedule[index].date, listSchedule, index),
         );
       },
       child: Container(

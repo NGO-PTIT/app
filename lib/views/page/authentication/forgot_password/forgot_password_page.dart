@@ -80,6 +80,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[50],
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(

@@ -20,7 +20,7 @@ class _MainPageState extends State<MainPage> {
   late PageController _pageController;
   int _selectedIndex = 0;
 
-  static const List<Widget> _page = <Widget>[
+  static List<Widget> _page = <Widget>[
     NewsPage(),
     SchedulePage(),
     ClubPage(),

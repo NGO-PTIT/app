@@ -3,27 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:football_news_app/config/constants/app_colors.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
-import 'package:football_news_app/config/constants/assets.dart';
 import 'package:football_news_app/views/common/common_drawer.dart';
 import 'package:football_news_app/views/common/common_text.dart';
 import 'package:football_news_app/views/page/schedule/widget/score_widget.dart';
-import 'package:football_news_app/views/page/statistics/widget/score_board_widget.dart';
-
-import '../../../config/constants/app_option.dart';
-import '../../../models/comment_model.dart';
 
 class SchedulePage extends StatefulWidget {
-  const SchedulePage({super.key});
+  final DateTime _selectedDate = DateTime.now();
+  SchedulePage({super.key});
 
   @override
   State<SchedulePage> createState() => _SchedulePageState();
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+  late DateTime _selectedDate;
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget._selectedDate;
+  }
+  void _presentDatePicker() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+      // Bạn cần có một hàm để tải lại dữ liệu dựa vào ngày đã chọn.
+      _loadScheduleForSelectedDate();
+    }
+  }
+  void _loadScheduleForSelectedDate() {
+    // Đây là nơi bạn sẽ lọc hoặc tải lại dữ liệu lịch thi đấu
+    // dựa trên _selectedDate và sau đó cập nhật UI.
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.gray49E,
+        backgroundColor: Colors.green[50],
         appBar: AppBar(
           iconTheme: const IconThemeData(color: AppColors.white),
           backgroundColor: AppColors.emeraldGreen,
@@ -37,7 +58,7 @@ class _SchedulePageState extends State<SchedulePage> {
         drawer: const CommonDrawer(),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -66,6 +87,8 @@ class _SchedulePageState extends State<SchedulePage> {
                         variant: Variant.h6,
                         fontStyle: FontStyle.bold,
                       ),
+                      Spacer(),
+                      _buildDatePickerButton(),
                     ],
                   ),
                 ),
@@ -77,10 +100,18 @@ class _SchedulePageState extends State<SchedulePage> {
                   fontStyle: FontStyle.bold,
                 ),
                 AppConstants.kSpacingItem8,
-                ScoreWidget(index: 0,),
-                ScoreWidget(index: 1,),
-                ScoreWidget(index: 2,),
-                ScoreWidget(index: 3,),
+                ScoreWidget(
+                  index: 0,
+                ),
+                ScoreWidget(
+                  index: 1,
+                ),
+                ScoreWidget(
+                  index: 2,
+                ),
+                ScoreWidget(
+                  index: 3,
+                ),
                 AppConstants.kSpacingItem8,
                 const CommonText(
                   "Primeira League",
@@ -89,12 +120,30 @@ class _SchedulePageState extends State<SchedulePage> {
                   fontStyle: FontStyle.bold,
                 ),
                 AppConstants.kSpacingItem8,
-                ScoreWidget(index: 4,),
-                ScoreWidget(index: 5,),
-                ScoreWidget(index: 6,),
+                ScoreWidget(
+                  index: 4,
+                ),
+                ScoreWidget(
+                  index: 5,
+                ),
+                ScoreWidget(
+                  index: 6,
+                ),
+                ScoreWidget(
+                  index: 9,
+                ),
               ],
             ),
           ),
-        ));
+        )
+    );
+  }
+  Widget _buildDatePickerButton() {
+    return ElevatedButton(
+      onPressed: _presentDatePicker,
+      child: Text('Chọn Ngày'),
+    );
   }
 }
+
+
