@@ -33,7 +33,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: Colors.green[50],
+            backgroundColor: Colors.green[50],
             appBar: AppBar(
               iconTheme: const IconThemeData(color: AppColors.white),
               leading: IconButton(
@@ -72,10 +72,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
               Statistics(
                 schedule: schedule,
               ),
-              Developments(),
-            ]
-            )
-        )
-    );
+              DevelopmentPage(
+                schedule: schedule,
+              ),
+            ])));
   }
 }

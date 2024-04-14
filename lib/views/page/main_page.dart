@@ -63,7 +63,7 @@ class _MainPageState extends State<MainPage> {
                     ? Icons.live_tv_rounded
                     : Icons.live_tv_outlined,
               ),
-              label: AppString.video,
+              label: AppString.schedule,
             ),
             BottomNavigationBarItem(
               icon: Icon(_selectedIndex == 2

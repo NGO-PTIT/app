@@ -1,9 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Developments extends StatelessWidget {
-  const Developments({super.key});
+import '../../../../models/schedule_model.dart';
 
+class DevelopmentPage extends StatefulWidget {
+  final Schedule schedule;
+
+  DevelopmentPage({super.key, required this.schedule});
+
+  @override
+  State<DevelopmentPage> createState() => DevelopmentPageState();
+}
+
+class DevelopmentPageState extends State<DevelopmentPage> {
+  late final Schedule schedule;
+
+  @override
+  void initState() {
+    super.initState();
+    schedule = widget.schedule;
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,14 +37,14 @@ class Developments extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'doi 1',
+                        schedule.team1,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
                       Text(
-                        '2',
+                        schedule.time[0],
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -41,14 +57,14 @@ class Developments extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'doi 1',
+                        schedule.team2,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
                       Text(
-                        '2',
+                        schedule.time[2],
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -77,11 +93,34 @@ class EventTimeline extends StatelessWidget {
     },
     {
       'minute': '12',
-      'team': 'Real Madrid',
+      'team': 'Man City',
       'player': 'Ruben Dias',
       'isGoal': true,
     },
-    // Thêm các sự kiện khác tương tự...
+    {
+      'minute': '42',
+      'team': 'Real Madrid',
+      'player': 'Benzema',
+      'isGoal': true,
+    },
+    {
+      'minute': '75',
+      'team': 'Man City',
+      'player': 'Ruben Dias',
+      'isGoal': true,
+    },
+    {
+      'minute': '60',
+      'team': 'Real Madrid',
+      'player': 'S.Ramos',
+      'isGoal': false,
+    },
+    {
+      'minute': '65',
+      'team': 'Real Madrid',
+      'player': 'S.Ramos',
+      'isGoal': false,
+    },
   ];
 
   @override

@@ -1,6 +1,20 @@
 class Assets {
   static const String _img_ = 'assets/images/';
   static const String _ic_ = 'assets/icons/';
+  static const String icon1 = '${_ic_}liverpool.png';
+  static const String icon2 = '${_ic_}chelsea.png';
+  static const String icon3 = '${_ic_}mc.png';
+  static const String icon4 = '${_ic_}barcelona.png';
+  static const String icon5 = '${_ic_}newcs.png';
+  static const String icon6 = '${_ic_}tot.png';
+  static const String icon7 = '${_ic_}west_ham.png';
+  static const String icon8 = '${_ic_}real_madrid.png';
+  static const String icon9 = '${_ic_}manchester_united.png';
+  static const String icon10 = '${_ic_}everton.png';
+  static const String icon11 = '${_ic_}aston_villa.png';
+  static const String icon12 = '${_ic_}arsenal.png';
+  static const String icon13 = '${_ic_}tot.png';
+  static const String icon14 = '${_ic_}brighton.png';
   static const String imgNews = '${_img_}img_news.png';
   static const String imgNews2 = '${_img_}img_news2.png';
   static const String imgNews3 = '${_img_}img_news3.png';

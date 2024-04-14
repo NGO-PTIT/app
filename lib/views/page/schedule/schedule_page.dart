@@ -112,14 +112,6 @@ class _SchedulePageState extends State<SchedulePage> {
                 ScoreWidget(
                   index: 3,
                 ),
-                AppConstants.kSpacingItem8,
-                const CommonText(
-                  "Primeira League",
-                  textColor: AppColors.black,
-                  variant: Variant.h7,
-                  fontStyle: FontStyle.bold,
-                ),
-                AppConstants.kSpacingItem8,
                 ScoreWidget(
                   index: 4,
                 ),
@@ -128,6 +120,29 @@ class _SchedulePageState extends State<SchedulePage> {
                 ),
                 ScoreWidget(
                   index: 6,
+                ),
+                ScoreWidget(
+                  index: 7,
+                ),
+                ScoreWidget(
+                  index: 8,
+                ),
+                AppConstants.kSpacingItem8,
+                const CommonText(
+                  "UEFA Champions League",
+                  textColor: AppColors.black,
+                  variant: Variant.h7,
+                  fontStyle: FontStyle.bold,
+                ),
+                AppConstants.kSpacingItem8,
+                ScoreWidget(
+                  index: 10,
+                ),
+                ScoreWidget(
+                  index: 11,
+                ),
+                ScoreWidget(
+                  index: 12,
                 ),
                 ScoreWidget(
                   index: 9,
