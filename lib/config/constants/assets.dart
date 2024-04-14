@@ -17,4 +17,6 @@ class Assets {
   static const String imgNews4 = '${_img_}new1.jpg';
   static const String imgNews5 = '${_img_}new2.jpg';
   static const String imgNews6 = '${_img_}new3.jpg';
+  static const String imgNews7 = '${_img_}new4.jpg';
+  static const String imgNews8 = '${_img_}new5.jpg';
 }

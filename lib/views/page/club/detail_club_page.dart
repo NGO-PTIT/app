@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:football_news_app/config/constants/app_option.dart';
 import 'package:football_news_app/views/common/common_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../config/constants/app_colors.dart';
 import '../../../config/constants/app_constants.dart';
@@ -14,6 +15,7 @@ import '../../../models/score_model.dart';
 import '../../../models/club_model.dart';
 
 class DetailClubPage extends StatefulWidget {
+
   final Club club;
   const DetailClubPage({
     super.key,

@@ -88,8 +88,8 @@ class _MatchInfoState extends State<MatchInfoPage> {
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.blue, width: 3.0)),
       ),
-      child: const Text(
-        'title',
+      child: Text(
+        '${schedule.team1} vs ${schedule.team2}',
         style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
       ),
     );
@@ -101,18 +101,18 @@ class _MatchInfoState extends State<MatchInfoPage> {
       children: [
         Column(
           children: [
-            Image.asset('assets/images/real_madrid.png', width: 50, height: 50),
-            const Text('Real'),
+            Image.asset(schedule.icon1, width: 50, height: 50),
+            Text(schedule.team1),
           ],
         ),
-        const Text(
-          '2:00 AM',
+        Text(
+          '${schedule.time} AM',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         Column(
           children: [
-            Image.asset('assets/images/barcelona.png', width: 50, height: 50),
-            const Text('Barcelona'),
+            Image.asset(schedule.icon2, width: 50, height: 50),
+            Text(schedule.team2),
           ],
         ),
       ],

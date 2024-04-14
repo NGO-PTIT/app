@@ -7,6 +7,7 @@ import '../../models/player_model.dart';
 import '../../models/schedule_model.dart';
 import '../../models/score_model.dart';
 import '../../models/statistical_model.dart';
+import '../../models/user_model.dart';
 import 'assets.dart';
 
 class AppOption {
@@ -136,16 +137,32 @@ class AppOption {
             'ghi nhận, nhưng tôi chỉ tập trung vào việc thi đấu. Tôi có ở lại '
             'hay không? Họ có thể yên tâm, hợp đồng vẫn còn 2 năm."'
     ),
-    // Newspaper(
-    //     imageNew: imageNew,
-    //     tittle: tittle,
-    //     content: content
-    // ),
-    // Newspaper(
-    //     imageNew: imageNew,
-    //     tittle: tittle,
-    //     content: content
-    // ),
+    Newspaper(
+        imageNew: Assets.imgNews7,
+        tittle: 'De Jong chia tay Barcelona?',
+        content: 'Một cầu thủ thường xuyên được cho là sẽ bị bán mỗi khi '
+            'Barcelona cần tăng cường tài chính là Frenkie de Jong. Blaugrana '
+            'đã tiến rất gần đến việc chia tay cầu thủ người Hà Lan '
+            'vào năm 2022.' + '\n' + 'Khi ấy, họ được cho là đạt thỏa thuận '
+            'với Man Utd về mức giá 85 triệu euro, nhưng cựu sao Ajax '
+            'kiên quyết không chịu rời đi.' + '\n' +'Cầu thủ 26 tuổi luôn '
+            'khẳng định rằng anh hạnh phúc ở câu lạc bộ và thậm chí còn '
+            'chỉ trích giới truyền thông vì đã dối trá về tình hình hợp '
+            ', mức lương cũng như tương lai của anh.'
+    ),
+    Newspaper(
+        imageNew: Assets.imgNews8,
+        tittle: 'Fabrizio Romano làm rõ khả năng Neymar trở lại Barca',
+        content: 'Mới đây, Fabrizio Romano đã lên tiếng phủ nhận những tin đồn '
+            'cho thấy Neymar bị Al Hilal chấm dứt hợp đồng. Ký giả người Ý '
+            'tiết lộ:' + '\n' + "Khi chúng ta có một siêu sao như Neymar, "
+            "việc cậu ấy thỉnh thoảng xuất hiện trên mặt báo với những "
+            "tin đồn là điều không thể tránh khỏi, và tôi muốn làm rõ một "
+            "số vấn đề ở đây. Đã có những báo cáo đáng kinh ngạc về việc Al "
+            "Hilal chấm dứt hợp đồng với Neymar, với những tin đồn cho thấy "
+            "cậu ấy có thể chuyển đến Inter Miami, hoặc thậm chí là trở lại "
+            "Barcelona... Vậy, chuyện gì thực sự đang xảy ra?"
+    ),
     // Newspaper(
     //     imageNew: imageNew,
     //     tittle: tittle,
@@ -171,9 +188,9 @@ class AppOption {
     ),
     Schedule(
         team1: 'Man City',
-        icon1: 'assets/icons/manchester_city.png',
+        icon1: 'assets/icons/mc.png',
         team2: 'Tottenham',
-        icon2: 'assets/icons/tottenham.png',
+        icon2: 'assets/icons/tot.png',
         time: '21:00',
         date: '12/04'
     ),
@@ -189,13 +206,13 @@ class AppOption {
         team1: 'Wolves',
         icon1: 'assets/icons/wolves.png',
         team2: 'Newcastle',
-        icon2: 'assets/icons/newcastle.png',
+        icon2: 'assets/icons/newcs.png',
         time: '20:00',
         date: '14/04'
     ),
     Schedule(
         team1: 'Spur',
-        icon1: 'assets/icons/southampton.png',
+        icon1: 'assets/icons/tot.png',
         team2: 'Crystal Palace',
         icon2: 'assets/icons/crystal_palace.png',
         time: '16:00',
@@ -250,6 +267,12 @@ class AppOption {
       text: 'Bình luận 3',
       image: Assets.imgNews2,
     ),
+  ];
+  static final List<User> user = [
+    User(
+        id: 1,
+        email: 'email',
+        password: 'password')
   ];
   static final List<Player> players = [
     Player(

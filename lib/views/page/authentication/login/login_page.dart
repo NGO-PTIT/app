@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
+import 'package:football_news_app/models/comment_model.dart';
 import 'package:football_news_app/models/user_model.dart';
 import 'package:football_news_app/views/page/authentication/forgot_password/forgot_password_page.dart';
 import 'package:football_news_app/views/page/authentication/signup/sign_up.dart';
 import 'package:football_news_app/views/page/main_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../config/constants/app_colors.dart';
+import '../../../../config/constants/app_option.dart';
+import '../../../../config/constants/assets.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -39,9 +43,11 @@ class _LoginPageState extends State<LoginPage> {
       }),
     );
     if (response.body.contains('ok')) {
+      saveUser(_accountController.text, _passwordController.text);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainPage()),
+        MaterialPageRoute(builder: (context) => const MainPage()
+        ),
       );
     } else {
       showDialog(
@@ -123,7 +129,8 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const MainPage()),
+                      MaterialPageRoute(builder: (context) => const MainPage()
+                      ),
                     );
                     _login();
                   },
@@ -151,4 +158,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+Future<void> saveUser(String u, String p)async {
+  AppOption.user.add(
+    User(
+      id: 1, email: u, password: p,
+    ),
+  );
 }

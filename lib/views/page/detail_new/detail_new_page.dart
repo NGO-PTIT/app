@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_colors.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
 import 'package:football_news_app/views/common/common_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../config/constants/app_option.dart';
 import '../../../config/constants/assets.dart';
@@ -12,6 +13,7 @@ class DetailNewPage extends StatefulWidget {
   final String image;
   final String title;
   final String content;
+
   const DetailNewPage({
     super.key,
     required this.image,
@@ -26,6 +28,7 @@ class DetailNewPage extends StatefulWidget {
 class _DetailNewPageState extends State<DetailNewPage> {
   bool showAllComments = false;
   TextEditingController commentController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +98,7 @@ class _DetailNewPageState extends State<DetailNewPage> {
                         AppOption.comments.add(
                           Comment(
                             image: Assets.imgNews,
-                            userName: 'User',
+                            userName: AppOption.user[1].email,
                             text: commentController.text.trim(),
                           ),
                         );

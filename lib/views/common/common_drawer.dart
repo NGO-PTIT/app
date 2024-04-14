@@ -63,7 +63,7 @@ class CommonDrawer extends StatelessWidget {
           ),
           ListTile(
             title: const CommonText(
-              'Lịch thi đấu',
+              'Lịch thi đấu và kết quả',
               variant: Variant.h6,
             ),
             onTap: () {
@@ -77,25 +77,7 @@ class CommonDrawer extends StatelessWidget {
           ),
           ListTile(
             title: const CommonText(
-              'Kết quả',
-              variant: Variant.h6,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const CommonText(
               'Đội',
-              variant: Variant.h6,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const CommonText(
-              'Thống kê & đánh giá',
               variant: Variant.h6,
             ),
             onTap: () {
