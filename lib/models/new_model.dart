@@ -1,10 +1,17 @@
 class Newspaper{
-  final String imageNew;
-  final String tittle;
+  final String image;
+  final String title;
   final String content;
   Newspaper({
-    required this.imageNew,
-    required this.tittle,
+    required this.image,
+    required this.title,
     required this.content,
   });
+  factory Newspaper.fromJson(Map<String, dynamic> json) {
+    return Newspaper(
+      image: json['image'],
+      title: json['title'],
+      content: json['content'],
+    );
+  }
 }

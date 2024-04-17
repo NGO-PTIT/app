@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:football_news_app/config/constants/app_colors.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
-import 'package:football_news_app/config/constants/app_option.dart';
-import 'package:football_news_app/config/constants/assets.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:football_news_app/views/common/common_drawer.dart';
 import 'package:football_news_app/views/common/common_text.dart';
 
@@ -18,7 +18,24 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  List<Newspaper> listNews = AppOption.listNewspaper;
+  List<Newspaper> listNews = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchNews();
+  }
+  Future<void> fetchNews() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/allnews'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        List<dynamic> jsonData = json.decode(response.body);
+        listNews = jsonData.map<Newspaper>((json) => Newspaper.fromJson(json)).toList();
+      });
+    } else {
+      throw Exception('Failed to load news');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,8 +121,8 @@ class VIteamNew extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, '/news_detail', arguments: {
-          'image': new1.imageNew,
-          'title': new1.tittle,
+          'image': new1.image,
+          'title': new1.title,
           'content': new1.content,
         });
       },
@@ -117,7 +134,7 @@ class VIteamNew extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0),
               image: DecorationImage(
                 image: AssetImage(
-                  new1.imageNew
+                  new1.image
                 ),
                 fit: BoxFit.cover,
               ),
@@ -129,7 +146,7 @@ class VIteamNew extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CommonText(
-                  new1.tittle,
+                  new1.title,
                   textColor: AppColors.black,
                   variant: Variant.h6,
                   fontStyle: FontStyle.bold,
@@ -162,8 +179,8 @@ class HIteamNew extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, '/news_detail', arguments: {
-          'image': new1.imageNew,
-          'title': new1.tittle,
+          'image': new1.image,
+          'title': new1.title,
           'content': new1.content,
         });
       },
@@ -176,7 +193,7 @@ class HIteamNew extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               image: DecorationImage(
-                image: AssetImage(new1.imageNew),
+                image: AssetImage(new1.image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -185,7 +202,7 @@ class HIteamNew extends StatelessWidget {
           AppConstants.kSpacingItemW8,
           Flexible(
             child: CommonText(
-              new1.tittle,
+              new1.title,
               textColor: AppColors.black,
               variant: Variant.h6,
               fontStyle: FontStyle.bold,

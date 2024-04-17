@@ -18,7 +18,7 @@ class ClubPage extends StatefulWidget {
 
 class _ClubPageState extends State<ClubPage> {
   TextEditingController _searchController = TextEditingController();
-  List<Club> listClub = AppOption.listClub;
+  List<Club> listClub = [];
 
   final List<Club> _filteredClubs = [];
 
