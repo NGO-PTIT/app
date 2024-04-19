@@ -12,4 +12,13 @@ class Player {
     required this.avatarUrl,
     required this.club
   });
+  factory Player.fromJson(Map<String, dynamic> json) {
+    return Player(
+        name: json['name'],
+        position: json['position'],
+        jerseyNumber: json['jerseyNumber'],
+        avatarUrl: json['avatarUrl'],
+        club: json['club']
+    );
+  }
 }

@@ -1,13 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
-import 'package:football_news_app/config/constants/app_option.dart';
 
 import '../../../config/constants/app_colors.dart';
-import '../../../config/constants/assets.dart';
 import '../../../models/club_model.dart';
 import '../../common/common_drawer.dart';
 import '../../common/common_text.dart';
 import 'detail_club_page.dart';
+import 'package:http/http.dart' as http;
 
 class ClubPage extends StatefulWidget {
   const ClubPage({Key? key}) : super(key: key);
@@ -18,26 +19,39 @@ class ClubPage extends StatefulWidget {
 
 class _ClubPageState extends State<ClubPage> {
   TextEditingController _searchController = TextEditingController();
-  List<Club> listClub = [];
+  List<Club> listClubs = [];
 
   final List<Club> _filteredClubs = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredClubs.addAll(listClub);
+    fetchClubs();
+  }
+  Future<void> fetchClubs() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/allclub'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        List<dynamic> jsonData = json.decode(response.body);
+        listClubs = jsonData.map<Club>((json) => Club.fromJson(json)).toList();
+        _filteredClubs.addAll(listClubs);
+      });
+    } else {
+      throw Exception('Failed to load club');
+    }
   }
 
   void _filterClubs(String query) {
     _filteredClubs.clear();
     if (query.isNotEmpty) {
-      for (var club in listClub) {
+      for (var club in listClubs) {
         if (club.name.toLowerCase().contains(query.toLowerCase())) {
           _filteredClubs.add(club);
         }
       }
     } else {
-      _filteredClubs.addAll(listClub);
+      _filteredClubs.addAll(listClubs);
     }
     setState(() {});
   }

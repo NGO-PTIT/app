@@ -1,21 +1,19 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:football_news_app/config/constants/app_option.dart';
 import 'package:football_news_app/views/common/common_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../config/constants/app_colors.dart';
 import '../../../config/constants/app_constants.dart';
-import '../../../config/constants/assets.dart';
 import '../../../models/player_model.dart';
 import '../../../models/score_model.dart';
 import '../../../models/club_model.dart';
+import 'package:http/http.dart' as http;
 
 class DetailClubPage extends StatefulWidget {
-
   final Club club;
   const DetailClubPage({
     super.key,
@@ -27,10 +25,39 @@ class DetailClubPage extends StatefulWidget {
 }
 
 class _DetailClubPageState extends State<DetailClubPage> {
+
+  List<Player> listPlayers = [];
+  List<Score> listScores = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/allplayer'));
+    final response2 = await http.get(Uri.parse('http://10.0.2.2:8080/api/allscore'));
+
+    if (response.statusCode == 200 && response2.statusCode == 200) {
+      setState(() {
+        List<dynamic> jsonData = json.decode(response.body);
+        List<dynamic> jsonData2 = json.decode(response2.body);
+        listPlayers = jsonData.map<Player>((json) => Player.fromJson(json)).toList();
+        listScores = jsonData2.map<Score>((json) => Score.fromJson(json)).toList();
+      });
+    } else {
+      throw Exception('Failed to load players');
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    List<ScoreModel> currentTeamDataList = getCurrentTeamDataList(widget.club.name);
-    List<Player> listPlayer = getPlayer(widget.club.name);
+    List<Score> currentTeamDataList = [];
+    for(Score score in listScores){
+      if(score.tournament.compareTo(widget.club.tournament)==0){
+        currentTeamDataList.add(score);
+      }
+    }
+    List<Player> listPlayer = getPlayer(widget.club.name, listPlayers);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -130,56 +157,58 @@ class _DetailClubPageState extends State<DetailClubPage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-
-                child: Column(
-                  children: [
-                    DataTable(
-                      columnSpacing: 24,
-                      columns: const [
-                        DataColumn(label: Text('TT')),
-                        DataColumn(label: Text('Đội')),
-                        DataColumn(label: Text('ST')),
-                        DataColumn(label: Text('T')),
-                        DataColumn(label: Text('H')),
-                        DataColumn(label: Text('B')),
-                        DataColumn(label: Text('HS')),
-                        DataColumn(label: Text('Đ')),
-                      ],
-                      rows: currentTeamDataList.map((teamData) {
-                        return DataRow(cells: [
-                          DataCell(Text('${teamData.position}')),
-                          DataCell(
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage:
-                                      AssetImage(teamData.avatarUrl),
-                                ),
-                                SizedBox(width: 8),
-                                Text(teamData.teamName),
-                              ],
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    children: [
+                      DataTable(
+                        columnSpacing: 24,
+                        columns: const [
+                          DataColumn(label: Text('TT')),
+                          DataColumn(label: Text('Đội')),
+                          DataColumn(label: Text('ST')),
+                          DataColumn(label: Text('T')),
+                          DataColumn(label: Text('H')),
+                          DataColumn(label: Text('B')),
+                          DataColumn(label: Text('HS')),
+                          DataColumn(label: Text('Đ')),
+                        ],
+                        rows: currentTeamDataList.map((teamData) {
+                          return DataRow(cells: [
+                            DataCell(Text('${teamData.position}')),
+                            DataCell(
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 15,
+                                    backgroundImage:
+                                    AssetImage(teamData.avatarUrl),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(teamData.teamName),
+                                ],
+                              ),
                             ),
-                          ),
-                          DataCell(Text('${teamData.matchesPlayed}')),
-                          DataCell(Text('${teamData.wins}')),
-                          DataCell(Text('${teamData.draws}')),
-                          DataCell(Text('${teamData.losses}')),
-                          DataCell(Text('${teamData.goalsFor}')),
-                          DataCell(Text('${teamData.goalsAgainst}')),
-                        ]);
-                      }).toList(),
-                    ),
-                  ],
+                            DataCell(Text('${teamData.matchesPlayed}')),
+                            DataCell(Text('${teamData.wins}')),
+                            DataCell(Text('${teamData.draws}')),
+                            DataCell(Text('${teamData.losses}')),
+                            DataCell(Text('${teamData.goalsFor-teamData.goalsAgainst}')),
+                            DataCell(Text('${teamData.point}')),
+                          ]);
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            Column(
 
+            Column(
               children: [
                 Expanded(
                   child: ListView.builder(
@@ -251,28 +280,12 @@ class _DetailClubPageState extends State<DetailClubPage> {
   }
 }
 
-List<Player> getPlayer(String club){
+List<Player> getPlayer(String club, List<Player> listPlayers){
   List<Player> listPlayer = [];
-  for (var player in AppOption.players){
+  for (var player in listPlayers){
     if(player.club == club) {
       listPlayer.add(player);
     }
   }
   return listPlayer;
-}
-
-
-List<ScoreModel> getCurrentTeamDataList(String name) {
-  switch (name) {
-    case 'Manchester United':
-      return AppOption.teamDataList1;
-    case 'Liverpool':
-      return AppOption.teamDataList2;
-    case 'Barcelona':
-      return AppOption.teamDataList3;
-    case 'Real Madrid':
-      return AppOption.teamDataList4;
-    default:
-      return [];
-  }
 }

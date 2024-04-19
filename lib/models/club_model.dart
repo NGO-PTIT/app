@@ -16,4 +16,16 @@ class Club {
     required this.target,
     required this.logo,
   });
+
+  factory Club.fromJson(Map<String, dynamic> json) {
+    return Club(
+      image: json['image'],
+      tournament: json['tournament'],
+      name: json['name'],
+      stadium: json['stadium'],
+      history: json['history'],
+      target: json['target'],
+      logo: json['logo'],
+    );
+  }
 }
