@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
 import 'package:football_news_app/views/page/authentication/login/login_page.dart';
+import 'package:provider/provider.dart';
 
+import '../../../ThemeProvider.dart';
 import '../../../config/constants/app_colors.dart';
 import '../../../config/constants/assets.dart';
 import '../../common/common_drawer.dart';
@@ -32,7 +34,7 @@ class _ManageNotificationPageState extends State<ManageNotificationPage> {
         backgroundColor: AppColors.emeraldGreen,
         title: const CommonText(
           fontStyle: FontStyle.bold,
-          'News',
+          'Setting',
           textColor: AppColors.white,
           variant: Variant.h6,
         ),
@@ -44,11 +46,13 @@ class _ManageNotificationPageState extends State<ManageNotificationPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CommonText(
+            CommonText(
               'Nhận thông báo ',
-              textColor: AppColors.black,
+              style: TextStyle(
+                fontSize: Provider.of<ThemeProvider>(context).fontSize + 5,
+                color: Colors.black,
+              ),
               variant: Variant.h6,
-              fontStyle: FontStyle.bold,
             ),
             AppConstants.kSpacingItem8,
             CheckBoxCustomWidget(
@@ -59,18 +63,27 @@ class _ManageNotificationPageState extends State<ManageNotificationPage> {
               isCheckBoxHot: _isCheckBoxMange,
               text: 'Nhận tin từ ban quản trị',
             ),
-            const CommonText(
+            CommonText(
               'Cỡ chữ nội dung bài viết',
               textColor: AppColors.black,
+              style: TextStyle(
+                fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                color: Colors.black,
+              ),
               variant: Variant.h6,
             ),
-            const CommonText(
-              'Mặc định',
-              textColor: AppColors.emeraldGreen,
-              variant: Variant.h6,
+            Slider(
+              min: 10.0,
+              max: 24.0,
+              value: Provider.of<ThemeProvider>(context, listen: false).fontSize,
+              onChanged: (newSize) {
+                Provider.of<ThemeProvider>(context, listen: false).setFontSize(newSize);
+              },
             ),
             SwitchCustomWidget(
-                isSwitched: _isSwitchedNotification, text: 'Nhận thông báo'),
+                isSwitched: _isSwitchedNotification,
+                text: 'Nhận thông báo'
+            ),
             SwitchCustomWidget(
                 isSwitched: _isSwitchedWaning, text: 'Âm thanh cảnh báo'),
             SwitchCustomWidget(
@@ -86,12 +99,16 @@ class _ManageNotificationPageState extends State<ManageNotificationPage> {
                         ),
                       );
                     },
-                    child: const CommonText(
+                    child: CommonText(
                       'Đăng xuất',
-                      textColor: Colors.red,
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold
+                      ),
                       variant: Variant.h6,
-                      fontStyle: FontStyle.bold,
-                    )),
+                    )
+                ),
               ],
             ),
           ],
@@ -128,6 +145,9 @@ class CheckBoxCustomWidget extends StatelessWidget {
             ),
             CommonText(
               _text,
+              style: TextStyle(
+                  fontSize: Provider.of<ThemeProvider>(context).fontSize,
+              ),
               textColor: AppColors.black,
               variant: Variant.h6,
             ),
@@ -158,7 +178,10 @@ class SwitchCustomWidget extends StatelessWidget {
           children: [
             CommonText(
               _text,
-              textColor: AppColors.black,
+              style: TextStyle(
+                  fontSize: Provider.of<ThemeProvider>(context).fontSize + 5,
+                  color: Colors.black,
+              ),
               variant: Variant.h6,
             ),
             Spacer(),

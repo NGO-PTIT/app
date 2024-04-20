@@ -86,7 +86,7 @@ class CommonText extends StatelessWidget {
 
   const CommonText(
     this.data, {
-    Key? key,
+    super.key,
     this.variant,
     this.decoration,
     this.maxLines,
@@ -96,7 +96,7 @@ class CommonText extends StatelessWidget {
     this.textColor,
     this.opacity = 1,
     this.height = 1.45,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

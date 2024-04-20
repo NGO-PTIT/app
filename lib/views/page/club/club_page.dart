@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
+import 'package:provider/provider.dart';
 
+import '../../../ThemeProvider.dart';
 import '../../../config/constants/app_colors.dart';
 import '../../../models/club_model.dart';
 import '../../common/common_drawer.dart';
@@ -65,7 +67,11 @@ class _ClubPageState extends State<ClubPage> {
         backgroundColor: AppColors.emeraldGreen,
         title: const CommonText(
           'Câu lạc bộ',
-          textColor: AppColors.white,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
           variant: Variant.h6,
         ),
       ),
@@ -74,11 +80,14 @@ class _ClubPageState extends State<ClubPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const CommonText(
+            CommonText(
               'Chọn câu lạc bộ',
-              textColor: AppColors.black,
+              style: TextStyle(
+                fontSize: Provider.of<ThemeProvider>(context).fontSize + 5,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
               variant: Variant.h6,
-              fontStyle: FontStyle.bold,
             ),
             AppConstants.kSpacingItem16,
             Row(
@@ -116,7 +125,11 @@ class _ClubPageState extends State<ClubPage> {
                   return ListTile(
                     title: CommonText(
                       club.name,
-                      textColor: AppColors.black,
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 2,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                       variant: Variant.h6,
                     ),
                     leading: CircleAvatar(

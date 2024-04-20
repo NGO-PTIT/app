@@ -85,7 +85,7 @@ class _StatisticsState extends State<Statistics> {
                 AppConstants.kSpacingItemW8,
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage(schedule.icon1),
+                  backgroundImage: AssetImage(schedule.icon2),
                 ),
                 AppConstants.kSpacingItemW8,
               ],

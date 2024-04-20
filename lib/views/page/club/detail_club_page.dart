@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:football_news_app/views/common/common_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../../ThemeProvider.dart';
 import '../../../config/constants/app_colors.dart';
 import '../../../config/constants/app_constants.dart';
 import '../../../models/player_model.dart';
@@ -70,37 +72,52 @@ class _DetailClubPageState extends State<DetailClubPage> {
                 Tab(
                     child: CommonText(
                   'Tổng quan',
-                  textColor: Colors.white,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   variant: Variant.mediums,
-                  fontStyle: FontStyle.bold,
                 )),
                 Tab(
                     child: CommonText(
                   'Thứ hạng',
-                  textColor: Colors.white,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   variant: Variant.mediums,
-                  fontStyle: FontStyle.bold,
                 )),
                 Tab(
                     child: CommonText(
                   'Cầu thủ',
-                  textColor: Colors.white,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   variant: Variant.mediums,
-                  fontStyle: FontStyle.bold,
                 )),
                 Tab(
                     child: CommonText(
                   'Tiểu sử',
-                  textColor: Colors.white,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   variant: Variant.mediums,
-                  fontStyle: FontStyle.bold,
                 )),
               ],
             ),
             title: CommonText(
               widget.club.name,
-              textColor: Colors.white,
-              fontStyle: FontStyle.bold,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
               variant: Variant.h6,
             )),
         body: TabBarView(
@@ -109,6 +126,7 @@ class _DetailClubPageState extends State<DetailClubPage> {
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
                     Container(
@@ -126,32 +144,66 @@ class _DetailClubPageState extends State<DetailClubPage> {
                     AppConstants.kSpacingItem20,
                     Text(
                       'Câu lạc bộ ${widget.club.name}',
-                      style:
-                          const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 6,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                     AppConstants.kSpacingItem10,
-                    const Text(
-                      'Về chúng tôi',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    Text(
+                      'Sân vận động: ${widget.club.stadium}',
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 1,
+                        color: Colors.black,
+                      ),
+                    ),
+                    AppConstants.kSpacingItem10,
+                    Text(
+                      'Giải đấu: ${widget.club.tournament}',
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 1,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    AppConstants.kSpacingItem10,
+                    Text(
+                      'Giới thiệu',
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.left,
                     ),
                     AppConstants.kSpacingItem10,
                     Text(
                       widget.club.history,
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize,
+                        color: Colors.black,
+                        height: 1.5,
+                      ),
                       textAlign: TextAlign.justify,
                     ),
                     AppConstants.kSpacingItem20,
-                    const Text(
+                    Text(
                       'Mục tiêu',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                     AppConstants.kSpacingItem10,
                     Text(
-                      widget.club.target,
+                      '\u2003${widget.club.target}',
                       textAlign: TextAlign.justify,
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize,
+                        color: Colors.black,
+                      ),
                     ),
                   ],
                 ),
@@ -256,18 +308,22 @@ class _DetailClubPageState extends State<DetailClubPage> {
                     AppConstants.kSpacingItem20,
                     Text(
                       'Lịch sử của ${widget.club.name}',
-                      style:
-                          const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold
-                          ),
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                     AppConstants.kSpacingItem10,
                     AppConstants.kSpacingItem10,
                     Text(
                       widget.club.history,
                       textAlign: TextAlign.justify,
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        fontSize: Provider.of<ThemeProvider>(context).fontSize,
+                        color: Colors.black,
+                      ),
                     ),
                   ],
                 ),

@@ -58,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),
@@ -127,11 +126,11 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MainPage()
-                      ),
-                    );
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const MainPage()
+                    //   ),
+                    // );
                     _login();
                   },
                   child: const Text('Đăng nhập'),

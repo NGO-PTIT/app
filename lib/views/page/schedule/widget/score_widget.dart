@@ -10,24 +10,24 @@ import '../../../common/common_text.dart';
 import '../../statistics/Statistics_before_match.dart';
 
 class ScoreWidget extends StatelessWidget {
-  final int index;
-  final List<Schedule> listSchedule = AppOption.footballSchedules;
+  final Schedule schedule;
 
   ScoreWidget({
     super.key,
-    required this.index,
+    required this.schedule,
   });
-  MaterialPageRoute<dynamic> getPageRoute(String check, List<Schedule> listSchedule, int index) {
-    if (check.compareTo('FT')==0) {
+
+  MaterialPageRoute<dynamic> getPageRoute(int check, Schedule schedule) {
+    if (check == 3) {
       return MaterialPageRoute(
         builder: (context) => StatisticsPage(
-          schedule: listSchedule[index],
+          schedule: schedule,
         ),
       );
     } else {
       return MaterialPageRoute(
         builder: (context) => MatchInfoPage(
-          schedule: listSchedule[index],
+          schedule: schedule,
         ),
       );
     }
@@ -39,7 +39,7 @@ class ScoreWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          getPageRoute(listSchedule[index].date, listSchedule, index),
+          getPageRoute(schedule.time.length, schedule),
         );
       },
       child: Container(
@@ -57,22 +57,16 @@ class ScoreWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: CommonText(
-                          listSchedule[index].date,
-                          variant: Variant.small,
-                          textColor: AppColors.black
-                      ),
+                      child: CommonText(schedule.date.substring(5, 10),
+                          variant: Variant.small, textColor: AppColors.black),
                     ),
                     Expanded(
-                      child: CommonText(
-                          listSchedule[index].team1,
-                          variant: Variant.small,
-                          textColor: AppColors.black
-                      ),
+                      child: CommonText(schedule.team1,
+                          variant: Variant.small, textColor: AppColors.black),
                     ),
                     CircleAvatar(
                       radius: 12,
-                      backgroundImage: AssetImage(listSchedule[index].icon1),
+                      backgroundImage: AssetImage(schedule.icon1),
                     ),
                   ],
                 ),
@@ -87,7 +81,7 @@ class ScoreWidget extends StatelessWidget {
                 ),
                 child: Center(
                   child: CommonText(
-                    listSchedule[index].time,
+                    schedule.time,
                     textColor: AppColors.black,
                     variant: Variant.small,
                     fontStyle: FontStyle.bold,
@@ -100,15 +94,12 @@ class ScoreWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 12,
-                      backgroundImage: AssetImage(listSchedule[index].icon2),
+                      backgroundImage: AssetImage(schedule.icon2),
                     ),
                     AppConstants.kSpacingItemW24,
                     Expanded(
-                      child: CommonText(
-                          listSchedule[index].team2,
-                          variant: Variant.small,
-                          textColor: AppColors.black
-                      ),
+                      child: CommonText(schedule.team2,
+                          variant: Variant.small, textColor: AppColors.black),
                     ),
                   ],
                 ),

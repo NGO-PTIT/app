@@ -1,12 +1,19 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'ThemeProvider.dart';
 import 'application.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
-  runApp(const Application());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => ThemeProvider(ThemeData.light()), // Default to light theme
+        child: const Application(),
+      ),
+  );
 }
 //
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

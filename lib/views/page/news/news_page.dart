@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:football_news_app/views/common/common_drawer.dart';
 import 'package:football_news_app/views/common/common_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../../ThemeProvider.dart';
 import '../../../models/new_model.dart';
 
 class NewsPage extends StatefulWidget {
@@ -19,35 +21,43 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   List<Newspaper> listNews = [];
+
   @override
   void initState() {
     super.initState();
     fetchNews();
   }
+
   Future<void> fetchNews() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/allnews'));
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/allnews'));
 
     if (response.statusCode == 200) {
       setState(() {
         List<dynamic> jsonData = json.decode(response.body);
-        listNews = jsonData.map<Newspaper>((json) => Newspaper.fromJson(json)).toList();
+        listNews = jsonData
+            .map<Newspaper>((json) => Newspaper.fromJson(json))
+            .toList();
       });
     } else {
       throw Exception('Failed to load news');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
+        backgroundColor: Colors.green[50],
         appBar: AppBar(
           iconTheme: const IconThemeData(color: AppColors.white),
           backgroundColor: AppColors.emeraldGreen,
           title: const CommonText(
-            fontStyle: FontStyle.bold,
             'News',
-            textColor: AppColors.white,
-            variant: Variant.h6,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
         drawer: const CommonDrawer(),
@@ -74,9 +84,12 @@ class _NewsPageState extends State<NewsPage> {
                   AppConstants.kSpacingItemW8,
                   const CommonText(
                     'Tin tức',
-                    textColor: AppColors.black,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                     variant: Variant.h6,
-                    fontStyle: FontStyle.bold,
                   )
                 ],
               ),
@@ -92,12 +105,9 @@ class _NewsPageState extends State<NewsPage> {
                         ),
                         child: Column(
                           children: [
-                            index == 0 ?
-                            VIteamNew(
-                              new1:listNews[0]
-                            ) :HIteamNew(
-                                new1:listNews[index]
-                            ),
+                            index == 0
+                                ? VIteamNew(new1: listNews[0])
+                                : HIteamNew(new1: listNews[index]),
                           ],
                         ),
                       );
@@ -111,6 +121,7 @@ class _NewsPageState extends State<NewsPage> {
 
 class VIteamNew extends StatelessWidget {
   final Newspaper new1;
+
   const VIteamNew({
     super.key,
     required this.new1,
@@ -133,9 +144,7 @@ class VIteamNew extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               image: DecorationImage(
-                image: AssetImage(
-                  new1.image
-                ),
+                image: AssetImage(new1.image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -147,9 +156,12 @@ class VIteamNew extends StatelessWidget {
               children: [
                 CommonText(
                   new1.title,
-                  textColor: AppColors.black,
+                  style: TextStyle(
+                    fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                   variant: Variant.h6,
-                  fontStyle: FontStyle.bold,
                 ),
                 AppConstants.kSpacingItem8,
                 const CommonText(
@@ -169,6 +181,7 @@ class VIteamNew extends StatelessWidget {
 
 class HIteamNew extends StatelessWidget {
   final Newspaper new1;
+
   const HIteamNew({
     super.key,
     required this.new1,
@@ -177,40 +190,43 @@ class HIteamNew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, '/news_detail', arguments: {
-          'image': new1.image,
-          'title': new1.title,
-          'content': new1.content,
-        });
-      },
-      child:  Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              image: DecorationImage(
-                image: AssetImage(new1.image),
-                fit: BoxFit.cover,
+        onTap: () {
+          Navigator.pushNamed(context, '/news_detail', arguments: {
+            'image': new1.image,
+            'title': new1.title,
+            'content': new1.content,
+          });
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width / 3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                image: DecorationImage(
+                  image: AssetImage(new1.image),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              height: 100,
+            ),
+            AppConstants.kSpacingItemW8,
+            Flexible(
+              child: CommonText(
+                new1.title,
+                textColor: AppColors.black,
+                variant: Variant.h6,
+                fontStyle: FontStyle.bold,
+                style: TextStyle(
+                  fontSize: Provider.of<ThemeProvider>(context).fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
-            height: 100,
-          ),
-          AppConstants.kSpacingItemW8,
-          Flexible(
-            child: CommonText(
-              new1.title,
-              textColor: AppColors.black,
-              variant: Variant.h6,
-              fontStyle: FontStyle.bold,
-              style: TextStyle(),
-            ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
 }

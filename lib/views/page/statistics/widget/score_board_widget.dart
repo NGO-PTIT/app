@@ -35,9 +35,6 @@ class ScoreBoardWidget extends StatelessWidget {
               _buildStatRow('Sút trúng đích', team1Stats.shotsOnTarget.toString(),
                   team2Stats.shotsOnTarget.toString()),
               const SizedBox(height: 8),
-              _buildStatRow('Kiểm soát bóng', team1Stats.possession.toString(),
-                  team2Stats.possession.toString()),
-              const SizedBox(height: 8),
               _buildStatRow('Số đường chuyền', team1Stats.passes.toString(),
                   team1Stats.passes.toString()
               ),
