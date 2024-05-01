@@ -4,7 +4,8 @@ import 'package:football_news_app/config/constants/app_colors.dart';
 import 'package:football_news_app/config/constants/app_constants.dart';
 import 'package:football_news_app/views/common/common_text.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../../../ThemeProvider.dart';
 import '../../../config/constants/app_option.dart';
@@ -28,8 +29,35 @@ class DetailNewPage extends StatefulWidget {
 }
 
 class _DetailNewPageState extends State<DetailNewPage> {
-  bool showAllComments = false;
   TextEditingController commentController = TextEditingController();
+  List<Comment> allComments = [];
+  List<Comment> listComments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/allcomment'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        List<dynamic> jsonData = json.decode(response.body);
+        allComments =
+            jsonData.map<Comment>((json) => Comment.fromJson(json)).toList();
+        for (Comment cm in allComments) {
+          if (cm.id.compareTo(widget.title) == 0) {
+            listComments.add(cm);
+          }
+        }
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,21 +134,72 @@ class _DetailNewPageState extends State<DetailNewPage> {
                   AppConstants.kSpacingItem8,
                   ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        AppOption.comments.add(
-                          Comment(
-                            image: Assets.imgNews,
+                      setState(() async {
+                        final response = await http.post(
+                          Uri.parse('http://10.0.2.2:8080/api/saveComment'),
+                          headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                          },
+                          body: jsonEncode(<String, String>{
+                            'userName': AppOption.user[1].email,
+                            'text': commentController.text.trim(),
+                            'image': Assets.imgNews,
+                            'id': widget.title,
+                          }),
+                        );
+                        if (response.body.contains('ok')) {
+                          Comment newComment = Comment(
                             userName: AppOption.user[1].email,
                             text: commentController.text.trim(),
-                          ),
-                        );
+                            image: Assets.imgNews,
+                            id: widget.title,
+                          );
+                          setState(() {
+                            listComments.insert(0, newComment);
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Thông báo'),
+                              content: const Text('Bình luận thành công'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Lỗi'),
+                              content: const Text(
+                                  'Lỗi chưa xác định, bình luận lại'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      Navigator.of(context).pop();
+                                    });
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       });
                       commentController.clear();
                     },
                     child: CommonText(
                       'Gửi',
                       style: TextStyle(
-                        fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                        fontSize:
+                            Provider.of<ThemeProvider>(context).fontSize + 3,
                         fontWeight: FontWeight.bold,
                         color: AppColors.emeraldGreen,
                       ),
@@ -131,7 +210,8 @@ class _DetailNewPageState extends State<DetailNewPage> {
                     'Bình luận gần đây',
                     textColor: AppColors.black,
                     style: TextStyle(
-                      fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                      fontSize:
+                          Provider.of<ThemeProvider>(context).fontSize + 3,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -139,49 +219,36 @@ class _DetailNewPageState extends State<DetailNewPage> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: showAllComments ? AppOption.comments.length : 3,
+                    itemCount: listComments.length,
                     itemBuilder: (context, index) {
                       return ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: CircleAvatar(
                           radius: 20,
                           backgroundImage:
-                              AssetImage(AppOption.comments[index].image),
+                              AssetImage(listComments[index].image),
                         ),
                         title: Text(
-                          AppOption.comments[index].userName,
+                          listComments[index].userName,
                           style: TextStyle(
-                            fontSize: Provider.of<ThemeProvider>(context).fontSize + 3,
+                            fontSize:
+                                Provider.of<ThemeProvider>(context).fontSize +
+                                    3,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
                         subtitle: Text(
                           style: TextStyle(
-                            fontSize: Provider.of<ThemeProvider>(context).fontSize,
+                            fontSize:
+                                Provider.of<ThemeProvider>(context).fontSize,
                             color: Colors.black,
                           ),
-                          AppOption.comments[index].text,
+                          listComments[index].text,
                         ),
                       );
                     },
                   ),
-                  AppConstants.kSpacingItem8,
-                  if (!showAllComments && AppOption.comments.length > 3)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            // TODO: BAD PERFORMANCE, WAIT API
-                            setState(() {
-                              showAllComments = true;
-                            });
-                          },
-                          child: Text("Xem thêm"),
-                        ),
-                      ],
-                    ),
                 ],
               )
             ],

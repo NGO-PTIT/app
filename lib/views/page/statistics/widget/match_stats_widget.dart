@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:football_news_app/config/constants/app_option.dart';
 
 import '../../../../config/constants/app_colors.dart';
 import '../../../../config/constants/app_constants.dart';
@@ -7,14 +8,17 @@ import '../../../../models/statistical_model.dart';
 import '../../../common/common_text.dart';
 
 class ScoreBoardWidget extends StatelessWidget {
-  MatchStats team1Stats = AppOption.team1Stats;
-  MatchStats team2Stats = AppOption.team2Stats;
+  final MatchStats matchStats;
+
   ScoreBoardWidget({
     super.key,
+    required this.matchStats,
   });
 
   @override
   Widget build(BuildContext context) {
+    var random = Random();
+    int randomNumber = random.nextInt(5);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
@@ -30,33 +34,33 @@ class ScoreBoardWidget extends StatelessWidget {
           ),
           child: Column(
             children: [
-              _buildStatRow('Sút', team1Stats.shots.toString(), team2Stats.shots.toString()),
+              _buildStatRow('Sút', matchStats.shots1.toString(), matchStats.shots2.toString()),
               const SizedBox(height: 8),
-              _buildStatRow('Sút trúng đích', team1Stats.shotsOnTarget.toString(),
-                  team2Stats.shotsOnTarget.toString()),
+              _buildStatRow('Sút trúng đích', matchStats.shotsOnTarget1.toString(),
+                  matchStats.shotsOnTarget2.toString()),
               const SizedBox(height: 8),
-              _buildStatRow('Số đường chuyền', team1Stats.passes.toString(),
-                  team1Stats.passes.toString()
+              _buildStatRow('Số đường chuyền', matchStats.passes1.toString(),
+                  matchStats.passes2.toString()
               ),
               const SizedBox(height: 8),
-              _buildStatRow('Chuyền thành công', team1Stats.passAccuracy,
-                  team2Stats.passAccuracy),
+              _buildStatRow('Chuyền thành công', matchStats.passAccuracy1,
+                  matchStats.passAccuracy2),
               const SizedBox(height: 8),
-              _buildStatRow('Phạm lỗi', team1Stats.fouls.toString(),
-                  team2Stats.fouls.toString()),
+              _buildStatRow('Phạm lỗi', matchStats.fouls1.toString(),
+                  matchStats.fouls2.toString()),
               const SizedBox(height: 8),
-              _buildStatRow('Thẻ vàng', team1Stats.yellowCards.toString(),
-                  team2Stats.yellowCards.toString()
+              _buildStatRow('Thẻ vàng', matchStats.yellowCards1.toString(),
+                  matchStats.yellowCards2.toString()
               ),
               const SizedBox(height: 8),
-              _buildStatRow('Thẻ đỏ', team1Stats.redCards.toString(),
-                  team2Stats.redCards.toString()),
+              _buildStatRow('Thẻ đỏ', matchStats.redCards1.toString(),
+                  matchStats.redCards2.toString()),
               const SizedBox(height: 8),
-              _buildStatRow('Việt vị', team1Stats.offsides.toString(),
-                  team2Stats.offsides.toString()),
+              _buildStatRow('Việt vị', matchStats.offsides1.toString(),
+                  matchStats.offsides2.toString()),
               const SizedBox(height: 8),
-              _buildStatRow('Phạt góc', team1Stats.corners.toString(),
-                  team1Stats.corners.toString()),
+              _buildStatRow('Phạt góc', matchStats.corners1.toString(),
+                  matchStats.corners2.toString()),
             ],
           ),
         ),
@@ -100,4 +104,5 @@ class ScoreBoardWidget extends StatelessWidget {
       ),
     );
   }
+
 }

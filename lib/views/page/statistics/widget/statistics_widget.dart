@@ -1,9 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:football_news_app/views/page/statistics/widget/score_board_widget.dart';
+import 'package:football_news_app/models/statistical_model.dart';
+import 'package:football_news_app/views/page/statistics/widget/match_stats_widget.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../ThemeProvider.dart';
 import '../../../../config/constants/app_colors.dart';
 import '../../../../config/constants/app_constants.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../../../../config/constants/app_option.dart';
 import '../../../../config/constants/assets.dart';
 import '../../../../models/schedule_model.dart';
@@ -22,19 +29,50 @@ class Statistics extends StatefulWidget {
 
 class _StatisticsState extends State<Statistics> {
   late final Schedule schedule;
+  List<Comment> allComments = [];
+  List<Comment> listComments = [];
+  List<MatchStats> listMatchStats = [];
 
   @override
   void initState() {
     super.initState();
     schedule = widget.schedule;
+    fetchData();
   }
 
-  bool showAllComments = false;
+  Future<void> fetchData() async {
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/api/allcomment'));
+    final response2 =
+    await http.get(Uri.parse('http://10.0.2.2:8080/api/allMatchStats'));
+
+    if (response.statusCode == 200 && response2.statusCode == 200) {
+      setState(() {
+        List<dynamic> jsonData = json.decode(response.body);
+        allComments =
+            jsonData.map<Comment>((json) => Comment.fromJson(json)).toList();
+        for (Comment cm in allComments) {
+          if (cm.id.compareTo(widget.schedule.infor) == 0) {
+            listComments.add(cm);
+          }
+        }
+        List<dynamic> jsonData2 = json.decode(response2.body);
+        listMatchStats =
+            jsonData2.map<MatchStats>((json) => MatchStats.fromJson(json)).toList();
+        print('Ok');
+        print(listMatchStats.length);
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   TextEditingController commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var random = Random();
+    int randomNumber = random.nextInt(5);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -113,8 +151,8 @@ class _StatisticsState extends State<Statistics> {
                         child: Row(
                           children: [
                             AppConstants.kSpacingItemW24,
-                            const CommonText(
-                              '80%',
+                            CommonText(
+                              '${listMatchStats[randomNumber].possession1}%',
                               textColor: AppColors.white,
                               variant: Variant.h6,
                               fontStyle: FontStyle.bold,
@@ -125,7 +163,7 @@ class _StatisticsState extends State<Statistics> {
                       ),
                       Positioned(
                         top: 6,
-                        left: MediaQuery.of(context).size.width * 0.35,
+                        left: MediaQuery.of(context).size.width * 0.3,
                         child: const Column(
                           children: [
                             CommonText(
@@ -152,8 +190,8 @@ class _StatisticsState extends State<Statistics> {
                       child: Row(
                         children: [
                           const Spacer(),
-                          const CommonText(
-                            '20%',
+                          CommonText(
+                            '${listMatchStats[randomNumber].possession2}%',
                             textColor: AppColors.white,
                             variant: Variant.h6,
                             fontStyle: FontStyle.bold,
@@ -172,9 +210,10 @@ class _StatisticsState extends State<Statistics> {
               shrinkWrap: true,
               itemCount: 1,
               itemBuilder: (context, index) {
-                return ScoreBoardWidget();
+                return ScoreBoardWidget(matchStats: listMatchStats[randomNumber],);
               },
             ),
+            AppConstants.kSpacingItem16,
             TextFormField(
               controller: commentController,
               decoration: InputDecoration(
@@ -187,13 +226,65 @@ class _StatisticsState extends State<Statistics> {
             AppConstants.kSpacingItem8,
             ElevatedButton(
               onPressed: () {
-                AppOption.comments.add(
-                  Comment(
-                    image: Assets.imgNews,
-                    userName: 'User',
-                    text: commentController.text,
-                  ),
-                );
+                setState(() async {
+                  final response = await http.post(
+                    Uri.parse('http://10.0.2.2:8080/api/saveComment'),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                    },
+                    body: jsonEncode(<String, String>{
+                      'userName': AppOption.user[1].email,
+                      'text': commentController.text.trim(),
+                      'image': Assets.imgNews,
+                      'id': widget.schedule.infor,
+                    }),
+                  );
+                  if (response.body.contains('ok')) {
+                    Comment newComment = Comment(
+                      userName: AppOption.user[1].email,
+                      text: commentController.text.trim(),
+                      image: Assets.imgNews,
+                      id: widget.schedule.infor,
+                    );
+                    setState(() {
+                      listComments.insert(0, newComment);
+                    });
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Thông báo'),
+                        content: const Text('Bình luận thành công'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Lỗi'),
+                        content: const Text('Lỗi chưa xác định, bình luận lại'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                });
+                commentController.clear();
               },
               child: const CommonText(
                 'Gửi',
@@ -211,47 +302,33 @@ class _StatisticsState extends State<Statistics> {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: showAllComments ? AppOption.comments.length : 3,
+              itemCount: listComments.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CircleAvatar(
                     radius: 20,
-                    backgroundImage:
-                        AssetImage(AppOption.comments[index].image),
+                    backgroundImage: AssetImage(listComments[index].image),
                   ),
                   title: Text(
-                    AppOption.comments[index].userName,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    listComments[index].userName,
+                    style: TextStyle(
+                      fontSize:
+                          Provider.of<ThemeProvider>(context).fontSize + 3,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   subtitle: Text(
-                    AppOption.comments[index].text,
-                    style: const TextStyle(
+                    style: TextStyle(
+                      fontSize: Provider.of<ThemeProvider>(context).fontSize,
                       color: Colors.black,
                     ),
+                    listComments[index].text,
                   ),
                 );
               },
             ),
-            AppConstants.kSpacingItem8,
-            if (!showAllComments && AppOption.comments.length > 3)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // TODO: BAD PERFORMANCE, WAIT API
-                      setState(() {
-                        showAllComments = true;
-                      });
-                    },
-                    child: Text("Xem thêm"),
-                  ),
-                ],
-              ),
           ],
         ),
       ),
